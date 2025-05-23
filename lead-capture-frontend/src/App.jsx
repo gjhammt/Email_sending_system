@@ -4,6 +4,9 @@ import LeadForm from './components/LeadForm';
 import AdminLogin from './components/AdminLogin';
 import AdminDashboard from './components/AdminDashboard';
 
+
+import { Button } from '@/components/ui/button';
+
 function App() {
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
   const [adminToken, setAdminToken] = useState('');
@@ -22,29 +25,23 @@ function App() {
 
   return (
     <>
-      <div className="p-4">
-        {!isAdminLoggedIn && (
-          <button
-            onClick={() => setShowLogin(true)}
-            className="bg-indigo-600 text-white px-4 py-2 rounded"
-          >
-            Admin Login
-          </button>
-        )}
-
-        {isAdminLoggedIn && (
+      <div className="min-h-screen p-4 bg-gray-50 relative">
+        {isAdminLoggedIn ? (
           <>
-            <button
-              onClick={handleLogout}
-              className="ml-4 bg-red-600 text-white px-4 py-2 rounded"
+            <AdminDashboard token={adminToken} admin={{ name: 'Admin Name', email: 'admin@example.com' }} onLogout={handleLogout}/>
+          </>
+        ) : (
+          <>
+            <LeadForm />
+            <Button
+              onClick={() => setShowLogin(true)}
+              className="fixed bottom-4 right-4 shadow-lg"
+              variant="default"
             >
-              Logout
-            </button>
-            <AdminDashboard token={adminToken} />
+              Admin Login
+            </Button>
           </>
         )}
-
-        {!isAdminLoggedIn && <LeadForm />}
       </div>
 
       {showLogin && (

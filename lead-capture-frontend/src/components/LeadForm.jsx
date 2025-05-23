@@ -1,18 +1,25 @@
 import React, { useState } from 'react';
-import axios from 'axios'; 
+
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
+
 const LeadForm = () => {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-  const [status, setStatus] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    console.log(e.target.name)
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setStatus('Submitting...');
-    console.log('Sending:', formData);
-// console.log('Received data:', req.body);
+    setSuccessMessage('');
+    setErrorMessage('');
+
     try {
       const res = await fetch('http://localhost:5000/api/lead', {
         method: 'POST',
@@ -22,90 +29,66 @@ const LeadForm = () => {
 
       const result = await res.json();
       if (res.ok) {
-        setStatus('Thank you! Your message has been received.');
+        setSuccessMessage('Thank you! Your message has been received.');
         setFormData({ name: '', email: '', message: '' });
-        // console.log( name, email, message)
       } else {
-        setStatus(result.error || 'Something went wrong.');
+        setErrorMessage(result.error || 'Something went wrong.');
       }
     } catch (error) {
-      setStatus('Server error. Please try again later.');
+      setErrorMessage('Server error. Please try again later.');
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-indigo-200 px-4">
-      <div className="bg-white shadow-lg rounded-lg max-w-lg w-full p-8">
-        <h2 className="text-3xl font-semibold mb-6 text-center text-indigo-700">
-          Contact Us
-        </h2>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label htmlFor="name" className="block mb-2 font-medium text-gray-700">
-              Name
-            </label>
-            <input
-              id="name"
-              type="text"
-              name="name"
-              placeholder="Your full name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition"
-            />
-          </div>
+    <div className="max-w-md mx-auto mt-10 p-8 min-h-[500px] border rounded-2xl shadow-xl bg-white flex flex-col justify-center">
+      <h2 className="text-2xl font-bold mb-6 text-center">Contact Us</h2>
+      {successMessage && <p className="text-green-600 mb-4">{successMessage}</p>}
+      {errorMessage && <p className="text-red-600 mb-4">{errorMessage}</p>}
 
-          <div>
-            <label htmlFor="email" className="block mb-2 font-medium text-gray-700">
-              Email
-            </label>
-            <input
-              id="email"
-              type="email"
-              name="email"
-              placeholder="your.email@example.com"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition"
-            />
-          </div>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <Label className="py-4" htmlFor="name">Name</Label>
+          <Input
+            className="py-6"
+            id="name"
+            name="name"
+            placeholder="Your name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+          />
+        </div>
 
-          <div>
-            <label htmlFor="message" className="block mb-2 font-medium text-gray-700">
-              Message
-            </label>
-            <textarea
-              id="message"
-              name="message"
-              placeholder="Write your message here..."
-              value={formData.message}
-              onChange={handleChange}
-              required
-              rows="5"
-              className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 resize-none transition"
-            ></textarea>
-          </div>
+        <div>
+          <Label className="py-4" htmlFor="email">Email</Label>
+          <Input
+            id="email"
+            name="email"
+            type="email"
+            placeholder="you@example.com"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+        </div>
 
-          <button
-            type="submit"
-            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-md transition"
-          >
-            Submit
-          </button>
-        </form>
+        <div>
+          <Label className="py-4" htmlFor="message">Message</Label>
+          <Textarea
+            id="message"
+            name="message"
+            placeholder="Type your message..."
+            value={formData.message}
+            onChange={handleChange}
+            required
+            className="py-3"
+          />
+        </div>
 
-        {status && (
-          <p
-            className={`mt-6 text-center font-medium ${
-              status.includes('Thank') ? 'text-green-600' : 'text-red-600'
-            }`}
-          >
-            {status}
-          </p>
-        )}
-      </div>
+        <Button type="submit" className="w-full">
+          Submit
+        </Button>
+      </form>
     </div>
   );
 };
