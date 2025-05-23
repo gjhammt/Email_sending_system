@@ -5,7 +5,7 @@ const LeadSchema = new mongoose.Schema({
   name: String,
   email: String,
   message: String,
-  date: { type: Date, default: Date.now }
-});
+  // date: { type: Date, default: Date.now }
+}, { timestamps: true });
 
 module.exports = mongoose.model('Lead', LeadSchema);
