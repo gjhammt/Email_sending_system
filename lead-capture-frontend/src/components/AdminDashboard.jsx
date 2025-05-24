@@ -157,115 +157,234 @@ const AdminDashboard = ({ token, admin, onLogout}) => {
     //     )}
     //   </div>
     // </div>
-    <div className=" bg-gray-50">
-      {/* Header */}
-      <div className="fixed top-0 left-0 w-full z-50">
-        <div
-          className="relative bg-cover bg-center h-40 shadow-md"
-          style={{ backgroundImage: 'url("https://images.pexels.com/photos/667838/pexels-photo-667838.jpeg")' }}
-        >
-          <div className="absolute inset-0 bg-opacity-60 flex items-center justify-between px-6 py-4 text-white">
-            <div>
-              <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-              <p className="text-sm">Logged in as {admin.name} ({admin.email})</p>
-            </div>
-            <Button variant="destructive" onClick={onLogout}>
-              Logout
-            </Button>
-          </div>
-        </div>
-      </div>
+//   <div className="bg-gray-50">
+//   {/* Header */}
+//   <div className="fixed top-0 left-0 w-full z-50">
+//     <div
+//       className="relative bg-cover bg-center h-40 shadow-md"
+//       style={{ backgroundImage: 'url("https://images.pexels.com/photos/667838/pexels-photo-667838.jpeg")' }}
+//     >
+//       <div className="absolute inset-0 bg-opacity-60 flex items-center justify-between px-6 py-4 text-white">
+//         <div>
+//           <h1 className="text-3xl font-bold">Admin Dashboard</h1>
+//           <p className="text-sm">Logged in as {admin.name} ({admin.email})</p>
+//         </div>
+//         <Button variant="destructive" onClick={onLogout}>
+//           Logout
+//         </Button>
+//       </div>
+//     </div>
+//   </div>
 
-      <div className="pt-40 px-6 pb-6 grid grid-cols-1 md:grid-cols-12 gap-6">
-        {/* Stats & Chart */}
-        <div className="col-span-1 md:col-span-8 bg-white p-6 rounded-lg shadow">
-          <h2 className="text-lg font-semibold mb-4">Leads Per Month</h2>
-          <ResponsiveContainer width="100%" height={250}>
-            <BarChart data={monthlyLeadCounts}>
-              <XAxis dataKey="month" />
-              <YAxis />
-              <Tooltip />
-              <Bar dataKey="count" fill="#6366f1" />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
+//   <div className="pt-40 px-6 pb-6 grid grid-cols-1 md:grid-cols-6 lg:grid-cols-12 gap-6">
+//     {/* Stats & Chart */}
+//     <div className="col-span-1 md:col-span-4 lg:col-span-8 bg-white p-6 rounded-lg shadow">
+//       <h2 className="text-lg font-semibold mb-4">Leads Per Month</h2>
+//       <div className="w-full h-[250px] min-h-[200px]">
+//         <ResponsiveContainer width="100%" height={250}>
+//           <BarChart data={monthlyLeadCounts}>
+//             <XAxis dataKey="month" />
+//             <YAxis />
+//             <Tooltip />
+//             <Bar dataKey="count" fill="#6366f1" />
+//           </BarChart>
+//         </ResponsiveContainer>
+//       </div>
+//     </div>
 
-        {/* Latest Leads */}
-        <div className="col-span-1 md:col-span-4 bg-white p-6 rounded-lg shadow overflow-y-auto max-h-[400px]">
-          <h2 className="text-lg font-semibold mb-4">Latest Leads</h2>
-          {latestLeads.map((lead, idx) => (
-            <div key={idx} className="mb-3 flex items-start gap-3">
-              <Avatar className="h-9 w-9">
-                <AvatarFallback>{lead.name.charAt(0)}</AvatarFallback>
-              </Avatar>
-              <div>
-                <p className="font-medium text-sm">{lead.name}</p>
-                <p className="text-xs text-gray-500">{lead.email}</p>
-                <p className="text-xs text-gray-400">{new Date(lead.date).toLocaleDateString()}</p>
-              </div>
-            </div>
-          ))}
-        </div>
+//     {/* Latest Leads */}
+//     <div className="col-span-1 md:col-span-2 lg:col-span-4 bg-white p-6 rounded-lg shadow h-[400px] overflow-y-auto">
+//       <h2 className="text-lg font-semibold mb-4 sticky top-0 bg-white pb-2">Latest Leads</h2>
+//       {latestLeads.map((lead, idx) => (
+//         <div key={idx} className="mb-3 flex items-start gap-3">
+//           <Avatar className="h-9 w-9">
+//             <AvatarFallback>{lead.name.charAt(0)}</AvatarFallback>
+//           </Avatar>
+//           <div>
+//             <p className="font-medium text-sm">{lead.name}</p>
+//             <p className="text-xs text-gray-500">{lead.email}</p>
+//             <p className="text-xs text-gray-400">{new Date(lead.date).toLocaleDateString()}</p>
+//           </div>
+//         </div>
+//       ))}
+//     </div>
 
-        {/* Lead List */}
-        <div className="col-span-12 md:col-span-4 bg-white p-4 rounded-lg shadow h-[calc(100vh-420px)] overflow-y-auto">
-          <h2 className="text-lg font-semibold mb-4">Leads</h2>
-          <Input
-            type="text"
-            placeholder="Search by name or email"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="mb-4"
-          />
-          {filteredEmails.map(([email, messages]) => (
-            <motion.div
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              key={email}
-              onClick={() => setSelectedEmail(email)}
-              className={`cursor-pointer p-3 rounded-md mb-2 shadow-sm transition duration-200 border ${
-                selectedEmail === email ? 'bg-indigo-100 border-indigo-400' : 'bg-white hover:bg-gray-100'
-              }`}
-            >
-              <div className="flex items-center gap-2">
-                <Avatar className="h-8 w-8">
-                  <AvatarFallback>{messages[0].name.charAt(0)}</AvatarFallback>
-                </Avatar>
-                <div>
-                  <p className="font-medium text-sm">{messages[0].name}</p>
-                  <p className="text-xs text-gray-600">{email}</p>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+//     {/* Lead List */}
+//     <div className="col-span-1  lg:col-span-4 bg-white p-4 rounded-lg shadow h-[calc(100vh-420px)] overflow-y-auto">
+//       <h2 className="text-lg font-semibold mb-4">Leads</h2>
+//       <Input
+//         type="text"
+//         placeholder="Search by name or email"
+//         value={searchTerm}
+//         onChange={(e) => setSearchTerm(e.target.value)}
+//         className="mb-4"
+//       />
+//       {filteredEmails.map(([email, messages]) => (
+//         <motion.div
+//           whileHover={{ scale: 1.02 }}
+//           whileTap={{ scale: 0.98 }}
+//           key={email}
+//           onClick={() => setSelectedEmail(email)}
+//           className={`cursor-pointer p-3 rounded-md mb-2 shadow-sm transition duration-200 border ${
+//             selectedEmail === email ? 'bg-indigo-100 border-indigo-400' : 'bg-white hover:bg-gray-100'
+//           }`}
+//         >
+//           <div className="flex items-center gap-2">
+//             <Avatar className="h-8 w-8">
+//               <AvatarFallback>{messages[0].name.charAt(0)}</AvatarFallback>
+//             </Avatar>
+//             <div>
+//               <p className="font-medium text-sm">{messages[0].name}</p>
+//               <p className="text-xs text-gray-600">{email}</p>
+//             </div>
+//           </div>
+//         </motion.div>
+//       ))}
+//     </div>
 
-        {/* Chat Area */}
-        <div className="col-span-12 md:col-span-8 bg-white p-6 rounded-lg shadow h-[calc(100vh-420px)] overflow-y-auto">
-          <h2 className="text-lg font-semibold mb-4">Messages</h2>
-          {selectedLeads.map((lead, idx) => (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: idx * 0.05 }}
-              className="mb-4"
-            >
-              <Card className="p-4">
-                <div className="text-sm text-gray-500 mb-1">
-                  {new Date(lead.date).toLocaleString()}
-                </div>
-                <div className="text-md font-medium">{lead.message}</div>
-              </Card>
-            </motion.div>
-          ))}
+//     {/* Chat Area */}
+//     <div className="col-span-1 md:col-span-6 lg:col-span-8 bg-white p-6 rounded-lg shadow h-[calc(100vh-420px)] overflow-y-auto">
+//       <h2 className="text-lg font-semibold mb-4">Messages</h2>
+//       {selectedLeads.map((lead, idx) => (
+//         <motion.div
+//           key={idx}
+//           initial={{ opacity: 0, y: 10 }}
+//           animate={{ opacity: 1, y: 0 }}
+//           transition={{ delay: idx * 0.05 }}
+//           className="mb-4"
+//         >
+//           <Card className="p-4">
+//             <div className="text-sm text-gray-500 mb-1">
+//               {new Date(lead.date).toLocaleString()}
+//             </div>
+//             <div className="text-md font-medium">{lead.message}</div>
+//           </Card>
+//         </motion.div>
+//       ))}
 
-          {selectedLeads.length === 0 && (
-            <p className="text-gray-500 italic">Select a lead to view messages</p>
-          )}
+//       {selectedLeads.length === 0 && (
+//         <p className="text-gray-500 italic">Select a lead to view messages</p>
+//       )}
+//     </div>
+//   </div>
+// </div>
+
+  <div className="pt-40 px-6 pb-6 flex flex-col gap-6">
+    {/* Header */}
+  <div className="fixed top-0 left-0 w-full z-50">
+    <div
+      className="relative bg-cover bg-center h-40 shadow-md"
+      style={{ backgroundImage: 'url("https://images.pexels.com/photos/667838/pexels-photo-667838.jpeg")' }}
+    >
+      <div className="absolute inset-0 bg-opacity-60 flex items-center justify-between px-6 py-4 text-white">
+        <div>
+          <h1 className="text-3xl font-bold">Admin Dashboard</h1>
+          <p className="text-sm">Logged in as {admin.name} ({admin.email})</p>
         </div>
+        <Button variant="destructive" onClick={onLogout}>
+          Logout
+        </Button>
       </div>
     </div>
+  </div>
+  {/* Top Row: Chart + Latest Leads */}
+  <div className="grid grid-cols-1 md:grid-cols-6 lg:grid-cols-12 gap-6">
+    {/* Chart - Takes more space */}
+    <div className="col-span-1 md:col-span-4 lg:col-span-8 bg-white p-6 rounded-lg shadow">
+      <h2 className="text-lg font-semibold mb-4">Leads Per Month</h2>
+      <div className="w-full h-[250px] min-h-[200px]">
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart data={monthlyLeadCounts}>
+            <XAxis dataKey="month" />
+            <YAxis />
+            <Tooltip />
+            <Bar dataKey="count" fill="#6366f1" />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+    </div>
+
+    {/* Latest Leads - Takes less space */}
+    <div className="col-span-1 md:col-span-2 lg:col-span-4 bg-white p-6 rounded-lg shadow h-[400px] overflow-y-auto">
+      <h2 className="text-lg font-semibold mb-4 sticky top-0 bg-white pb-2">Latest Leads</h2>
+      <div className="space-y-3">
+        {latestLeads.map((lead, idx) => (
+          <div key={idx} className="flex items-start gap-3">
+            <Avatar className="h-9 w-9">
+              <AvatarFallback>{lead.name.charAt(0)}</AvatarFallback>
+            </Avatar>
+            <div>
+              <p className="font-medium text-sm">{lead.name}</p>
+              <p className="text-xs text-gray-500">{lead.email}</p>
+              <p className="text-xs text-gray-400">{new Date(lead.date).toLocaleDateString()}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  {/* Bottom Row: Lead List + Chat Area */}
+  <div className="grid grid-cols-1 md:grid-cols-6 lg:grid-cols-12 gap-6">
+    {/* Lead List - Narrower column */}
+    <div className="col-span-1 md:col-span-2 lg:col-span-4 bg-white p-4 rounded-lg shadow h-[calc(100vh-420px)] overflow-y-auto">
+      <h2 className="text-lg font-semibold mb-4">Leads</h2>
+      <Input
+        type="text"
+        placeholder="Search by name or email"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className="mb-4"
+      />
+      {filteredEmails.map(([email, messages]) => (
+        <motion.div
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          key={email}
+          onClick={() => setSelectedEmail(email)}
+          className={`cursor-pointer p-3 rounded-md mb-2 shadow-sm transition duration-200 border ${
+            selectedEmail === email ? 'bg-indigo-100 border-indigo-400' : 'bg-white hover:bg-gray-100'
+          }`}
+        >
+          <div className="flex items-center gap-2">
+            <Avatar className="h-8 w-8">
+              <AvatarFallback>{messages[0].name.charAt(0)}</AvatarFallback>
+            </Avatar>
+            <div>
+              <p className="font-medium text-sm">{messages[0].name}</p>
+              <p className="text-xs text-gray-600">{email}</p>
+            </div>
+          </div>
+        </motion.div>
+      ))}
+    </div>
+
+    {/* Chat Area - Wider column */}
+    <div className="col-span-1 md:col-span-4 lg:col-span-8 bg-white p-6 rounded-lg shadow h-[calc(100vh-420px)] overflow-y-auto">
+      <h2 className="text-lg font-semibold mb-4">Messages</h2>
+      {selectedLeads.map((lead, idx) => (
+        <motion.div
+          key={idx}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: idx * 0.05 }}
+          className="mb-4"
+        >
+          <Card className="p-4">
+            <div className="text-sm text-gray-500 mb-1">
+              {new Date(lead.date).toLocaleString()}
+            </div>
+            <div className="text-md font-medium">{lead.message}</div>
+          </Card>
+        </motion.div>
+      ))}
+
+      {selectedLeads.length === 0 && (
+        <p className="text-gray-500 italic">Select a lead to view messages</p>
+      )}
+    </div>
+  </div>
+</div>
   );
 };
 
